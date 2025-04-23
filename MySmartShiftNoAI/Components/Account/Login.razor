@@ -1,0 +1,39 @@
+﻿@page "/Account/Login"
+@using MySmartShiftNoAI.Services
+
+@inject AuthService authService
+@inject NavigationManager navigationManager
+
+<h3>Login</h3>
+
+<CascadingAuthenticationState>
+
+    <AuthorizeView>
+        <Authorized>
+            <h2>You are already logged in, piss off.</h2>
+        </Authorized>
+
+        <NotAuthorized>
+
+            <input placeholder="Email" @bind-value="email" />
+            <input placeholder="Password" @bind-value="password" />
+
+        </NotAuthorized>
+
+    </AuthorizeView>
+
+</CascadingAuthenticationState>
+
+@code {
+    string email = "";
+
+    string password = "";
+
+    async Task OnLogin() {
+        var result = await authService.LoginAsync(email, password);
+
+        if (result.IsSuccess) {
+            navigationManager.NavigateTo("/");
+        }
+    }
+}

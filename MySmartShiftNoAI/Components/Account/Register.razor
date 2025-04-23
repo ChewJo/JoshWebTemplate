@@ -1,0 +1,49 @@
+﻿@page "/account/register"
+@using MySmartShiftNoAI.Services
+
+@inject AuthService authService
+@inject NavigationManager navigationManager
+@using MySmartShiftNoAI.Models
+
+<h3>Register</h3>
+
+<CascadingAuthenticationState>
+
+    <AuthorizeView>
+
+        <Authorized>
+            <h2>You are already logged in</h2>
+        </Authorized>
+
+        <NotAuthorized>
+            <input @bind-value="RegisterModel.Usernmane" placeholder="Email..." />
+            <input @bind-value="RegisterModel.Password" placeholder="Password..." />
+
+            <input type="button" @onclick="RegisterUser" value="Register" />
+        </NotAuthorized>
+
+    </AuthorizeView>
+
+</CascadingAuthenticationState>
+
+@code {
+    LoginArgs RegisterModel = new LoginArgs();
+
+    private async Task RegisterUser()
+    {
+        var result = await authService.RegisterAsync(RegisterModel);
+
+        if (result.IsSuccess)
+        {
+            Console.WriteLine("Logging successful!");
+            await authService.LoginAsync(RegisterModel.Usernmane, RegisterModel.Password);
+            navigationManager.NavigateTo("/");
+        }
+        else
+        {
+            Console.WriteLine("Logging failed!");
+            Console.WriteLine("Errors: ", result.Errors);
+        }
+
+    }
+}
