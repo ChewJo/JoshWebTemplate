@@ -1,9 +1,10 @@
-﻿@page "/account/register"
+@page "/account/register"
 @using MySmartShiftNoAI.Services
-
-@inject AuthService authService
-@inject NavigationManager navigationManager
+@using MySmartShiftNoAI.Services.Interfaces
 @using MySmartShiftNoAI.Models
+
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
 
 <h3>Register</h3>
 
@@ -16,10 +17,38 @@
         </Authorized>
 
         <NotAuthorized>
-            <input @bind-value="RegisterModel.Usernmane" placeholder="Email..." />
-            <input @bind-value="RegisterModel.Password" placeholder="Password..." />
+            <div>
+                <div>
+                    <label>
+                        Email:
+                        <input type="email" @bind="RegisterModel.Username" disabled="@_isProcessing" />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        Password:
+                        <input type="password" @bind="RegisterModel.Password" disabled="@_isProcessing" />
+                    </label>
+                </div>
 
-            <input type="button" @onclick="RegisterUser" value="Register" />
+                @if (!string.IsNullOrEmpty(_error))
+                {
+                    <div style="color: red">
+                        @_error
+                    </div>
+                }
+
+                <button @onclick="RegisterUser" disabled="@_isProcessing">
+                    @if (_isProcessing)
+                    {
+                        <span>Registering...</span>
+                    }
+                    else
+                    {
+                        <span>Register</span>
+                    }
+                </button>
+            </div>
         </NotAuthorized>
 
     </AuthorizeView>
@@ -27,23 +56,47 @@
 </CascadingAuthenticationState>
 
 @code {
-    LoginArgs RegisterModel = new LoginArgs();
+    private LoginArgs RegisterModel = new();
+    private bool _isProcessing;
+    private string? _error;
 
     private async Task RegisterUser()
     {
-        var result = await authService.RegisterAsync(RegisterModel);
-
-        if (result.IsSuccess)
+        if (string.IsNullOrWhiteSpace(RegisterModel.Username) || string.IsNullOrWhiteSpace(RegisterModel.Password))
         {
-            Console.WriteLine("Logging successful!");
-            await authService.LoginAsync(RegisterModel.Usernmane, RegisterModel.Password);
-            navigationManager.NavigateTo("/");
-        }
-        else
-        {
-            Console.WriteLine("Logging failed!");
-            Console.WriteLine("Errors: ", result.Errors);
+            _error = "Please enter both email and password";
+            return;
         }
 
+        try
+        {
+            _isProcessing = true;
+            _error = null;
+
+            var result = await AuthService.RegisterAsync(RegisterModel);
+            if (result.IsSuccess)
+            {
+                var loginResult = await AuthService.LoginAsync(RegisterModel.Username, RegisterModel.Password);
+                if (loginResult.IsSuccess)
+                {
+                    NavigationManager.NavigateTo("/");
+                    return;
+                }
+                _error = "Registration successful but login failed. Please try logging in manually.";
+            }
+            else
+            {
+                _error = result.Errors.FirstOrDefault()?.Message ?? "Registration failed";
+            }
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _isProcessing = false;
+            StateHasChanged();
+        }
     }
 }

@@ -1,0 +1,54 @@
+@page "/group/add"
+@using MySmartShiftNoAI.Models
+@using MySmartShiftNoAI.Services
+@using MySmartShiftNoAI.Services.Interfaces
+@inject IUserService UserService
+@inject NavigationManager NavigationManager
+
+@code {
+    private ApplicationUser? _user;
+    private string _groupName = string.Empty;
+    private string? _error;
+    private bool _isLoading = true;
+    private bool _isAdmin = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _user = await UserService.GetUser();
+        _isAdmin = _user != null && _user.Role?.ToLower() == "admin";
+        _isLoading = false;
+        if (!_isAdmin)
+        {
+            // Optionally redirect or just show denied message
+            // NavigationManager.NavigateTo("/");
+        }
+    }
+
+    private void AddGroupButton()
+    {
+        // Add your group creation logic here
+        Console.WriteLine($"Adding group: {_groupName}");
+    }
+}
+
+@if (_isLoading)
+{
+    <p>Loading...</p>
+}
+else if (!_isAdmin)
+{
+    <h3>Access Denied</h3>
+    <p>You do not have permission to add groups.</p>
+}
+else
+{
+    <h3>Add New Group</h3>
+    <EditForm OnValidSubmit="AddGroupButton">
+        <InputText @bind-Value="_groupName" placeholder="Group Name" />
+        <button type="submit">Add Group</button>
+    </EditForm>
+    @if (!string.IsNullOrEmpty(_error))
+    {
+        <p style="color: red">@_error</p>
+    }
+}
