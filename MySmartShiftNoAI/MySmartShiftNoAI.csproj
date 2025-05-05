@@ -16,7 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
+    <ProjectReference Include="..\MySmartShift.Core\MySmartShift.Core.csproj" />
+    <ProjectReference Include="..\MySmartShift.Providers.Auth\MySmartShift.Providers.Auth.csproj" />
+    <ProjectReference Include="..\MySmartShift.Services.Account\MySmartShift.Services.Account.csproj" />
   </ItemGroup>
 
   <ItemGroup>

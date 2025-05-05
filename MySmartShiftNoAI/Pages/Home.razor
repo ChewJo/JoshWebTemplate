@@ -1,88 +1,54 @@
 @page "/"
-@using MySmartShiftNoAI.Models
-@using MySmartShiftNoAI.Services
-@using MySmartShiftNoAI.Services.Interfaces
+@using MySmartShift.Core.Models.Account
+@using MySmartShift.Core.Services.Account.Api
+
 @inject NavigationManager NavigationManager
-@inject IAuthService AuthService
-@inject IUserService UserService
 
-<PageTitle>Home</PageTitle>
+@inject IAccountApiService AccountApiService;
 
-<h1>Welcome to MySmartShift</h1>
+<h3>Welcome to MySmartShift!</h3>
 
-<AuthorizeView>
-    <Authorized>
-        <div>
-            <h2>Database User:</h2>
-            <p>
-                @if (DatabaseUser != null)
-                {
-                    <strong>Role:</strong> @DatabaseUser.Role <br />
-                }
-                else
-                {
-                    <span>Loading database user...</span>
-                }
-            </p>
-        </div>
-        @if (_user != null)
-        {
-            <div>
-                <h2>Logged in as:</h2>
-                <p>
-                    <strong>Name:</strong> @_user.FirstName @_user.LastName<br />
-                    <strong>Email:</strong> @_user.Email<br />
-                    <strong>Role:</strong> @_user.Role
-                </p>
-                <button @onclick="LogoutAsync">Logout</button>
-            </div>
-        }
-        else
-        {
-            <div>
-                <div>Loading user information...</div>
-            </div>
-        }
-    </Authorized>
-    <NotAuthorized Context="authContext">
-        <div>
-            <h2>Not Logged In</h2>
-            <p>Please log in to access your account.</p>
-            <button @onclick="NavigateToLogin">Login</button>
-        </div>
-    </NotAuthorized>
-</AuthorizeView>
+@if (_isLoading)
+{
+    <p>Loading user info...</p>
+}
+else
+{
+    if (user is not null)
+    {
+        <p>User role: @user.Role</p>
+        <p>User ID: @user.Id</p>
+        <p>Created at: @user.CreatedAt</p>
+    }
+}
+
+<div>
+    <a href="/account/login">Login</a>
+    <a href="/account/register">Register</a>
+    <a href="/account/manage">Manage</a>
+
+    <button @onclick="Logout">Logout</button>
+
+</div>
 
 @code {
-    private ApplicationUser? _user;
-
-    private DbUser? DatabaseUser { get; set; }
+    private bool _isLoading = true;
+    public UserModel? user;
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadUserData();
+        user = await AccountApiService.GetCurrentUserModelAsync();
+
+        _isLoading = false;
     }
 
-    private async Task LoadUserData()
+    private async void Logout()
     {
-        var isAuthenticated = await AuthService.IsAuthenticatedAsync();
-        if (isAuthenticated)
+        var result = await AccountApiService.LogoutAsync();
+
+        if (result.IsSuccess)
         {
-            _user = await UserService.GetUser();
-
-            DatabaseUser = await UserService.GetDbUser();
-            StateHasChanged();
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); // Force refresh the page
         }
-    }
-
-    private void NavigateToLogin()
-    {
-        NavigationManager.NavigateTo("/account/login");
-    }
-
-    private async Task LogoutAsync()
-    {
-        await AuthService.LogoutAsync();
-        _user = null;
     }
 }

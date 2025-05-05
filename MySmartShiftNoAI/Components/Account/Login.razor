@@ -1,105 +1,33 @@
 @page "/account/login"
-@using MySmartShiftNoAI.Services.Interfaces
-@using MySmartShiftNoAI.Models
+@using MySmartShift.Core.Models.Account
+@using MySmartShift.Core.Services.Account.Api
 
-@inject IAuthService AuthService
+@inject IAccountApiService AccountApiService
 @inject NavigationManager NavigationManager
 
-<PageTitle>Login</PageTitle>
-
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="mb-0">Login</h3>
-                </div>
-                <div class="card-body">
-                    <AuthorizeView>
-                        <Authorized>
-                            <div class="alert alert-info">
-                                You are already logged in. <a href="/">Return to home</a>
-                            </div>
-                        </Authorized>
-                        <NotAuthorized Context="authContext">
-                            <EditForm Model="@_model" OnValidSubmit="OnLoginAsync">
-                                <DataAnnotationsValidator />
-                                <ValidationSummary />
-
-                                @if (!string.IsNullOrEmpty(_errorMessage))
-                                {
-                                    <div class="alert alert-danger">
-                                        @_errorMessage
-                                    </div>
-                                }
-
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <InputText id="email" class="form-control" @bind-Value="_model.Username" />
-                                    <ValidationMessage For="@(() => _model.Username)" />
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Password</label>
-                                    <InputText id="password" type="password" class="form-control" @bind-Value="_model.Password" />
-                                    <ValidationMessage For="@(() => _model.Password)" />
-                                </div>
-
-                                <div class="mb-3 form-check">
-                                    <InputCheckbox id="rememberMe" class="form-check-input" @bind-Value="_model.RememberMe" />
-                                    <label class="form-check-label" for="rememberMe">Remember me</label>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary" disabled="@_isLoading">
-                                    @if (_isLoading)
-                                    {
-                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                        <span class="ms-1">Logging in...</span>
-                                    }
-                                    else
-                                    {
-                                        <span>Login</span>
-                                    }
-                                </button>
-                            </EditForm>
-                        </NotAuthorized>
-                    </AuthorizeView>
-                </div>
-            </div>
-        </div>
+<EditForm Model="loginUserModel" OnValidSubmit="LoginAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label>Email:</label>
+        <InputText @bind-Value="loginUserModel.Email" />
     </div>
-</div>
+    <div>
+        <label>Password:</label>
+        <InputText @bind-Value="loginUserModel.Password" type="password" />
+    </div>
+    <button type="submit">Login</button>
+</EditForm>
 
 @code {
-    private LoginArgs _model = new();
-    private string? _errorMessage;
-    private bool _isLoading;
+    private LoginUserModel loginUserModel = new();
 
-    private async Task OnLoginAsync()
+    private async Task LoginAsync()
     {
-        try
+        var result = await AccountApiService.LoginAsync(loginUserModel);
+        if (result.IsSuccess)
         {
-            _isLoading = true;
-            _errorMessage = null;
-
-            var result = await AuthService.LoginAsync(_model.Username, _model.Password);
-
-            if (result.IsSuccess)
-            {
-                NavigationManager.NavigateTo("/");
-            }
-            else
-            {
-                _errorMessage = result.Errors.FirstOrDefault()?.Message ?? "Login failed. Please check your credentials and try again.";
-            }
-        }
-        catch (Exception ex)
-        {
-            _errorMessage = "An unexpected error occurred. Please try again.";
-        }
-        finally
-        {
-            _isLoading = false;
+            NavigationManager.NavigateTo("/");
         }
     }
 }
