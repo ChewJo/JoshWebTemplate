@@ -23,6 +23,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auth", "Auth", "{4001155C-0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySmartShift.Providers.Auth", "MySmartShift.Providers.Auth\MySmartShift.Providers.Auth.csproj", "{116911E5-AD45-4825-AECD-AC5891556A3D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{5E777282-EF3C-4097-BD93-80D07F954DA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySmartShift.Services.Projects", "MySmartShift.Services.Projects\MySmartShift.Services.Projects.csproj", "{FA7903C9-845C-4BED-89FF-85143DCB7D70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,10 @@ Global
 		{116911E5-AD45-4825-AECD-AC5891556A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{116911E5-AD45-4825-AECD-AC5891556A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{116911E5-AD45-4825-AECD-AC5891556A3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA7903C9-845C-4BED-89FF-85143DCB7D70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA7903C9-845C-4BED-89FF-85143DCB7D70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA7903C9-845C-4BED-89FF-85143DCB7D70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA7903C9-845C-4BED-89FF-85143DCB7D70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +64,8 @@ Global
 		{C557A11A-F69F-428E-A477-9841FF9BFF39} = {A0E10AD4-AB49-41AE-9034-B8AD8CC699E9}
 		{4001155C-0421-4541-A62A-99B4B9B1C3F9} = {15ED9F91-FE63-4BF0-8950-482FB3C67318}
 		{116911E5-AD45-4825-AECD-AC5891556A3D} = {4001155C-0421-4541-A62A-99B4B9B1C3F9}
+		{5E777282-EF3C-4097-BD93-80D07F954DA5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{FA7903C9-845C-4BED-89FF-85143DCB7D70} = {5E777282-EF3C-4097-BD93-80D07F954DA5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1EA7F5FA-2408-41E7-8887-267C046EDC38}

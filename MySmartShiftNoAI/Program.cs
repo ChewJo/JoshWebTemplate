@@ -7,6 +7,8 @@ using MySmartShift.Providers.Auth;
 using MySmartShift.Services.Account.Api;
 using MySmartShiftNoAI;
 using MudBlazor.Services;
+using MySmartShift.Services.Projects.Api;
+using MySmartShift.Core.Services.Projects.Api;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -17,6 +19,7 @@ builder.Services.AddBlazoredLocalStorage();
 
 // Register application services
 builder.Services.AddScoped<IAccountApiService, AccountApiService>();
+builder.Services.AddScoped<IProjectApiService, ProjectApiService>();
 
 builder.Services.AddMudServices();
 

@@ -20,6 +20,7 @@
     <ProjectReference Include="..\MySmartShift.Core\MySmartShift.Core.csproj" />
     <ProjectReference Include="..\MySmartShift.Providers.Auth\MySmartShift.Providers.Auth.csproj" />
     <ProjectReference Include="..\MySmartShift.Services.Account\MySmartShift.Services.Account.csproj" />
+    <ProjectReference Include="..\MySmartShift.Services.Projects\MySmartShift.Services.Projects.csproj" />
   </ItemGroup>
 
   <ItemGroup>
