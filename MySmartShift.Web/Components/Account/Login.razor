@@ -1,0 +1,35 @@
+﻿@page "/account/login"
+@using MySmartShift.Core.Models.Account
+@using MySmartShift.Core.Services.Account.Api
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject ProtectedSessionStorage ProtectedSessionStore
+
+@inject IAccountApiService AccountApiService
+@inject NavigationManager NavigationManager
+
+<EditForm Model="loginUserModel" OnValidSubmit="LoginAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label>Email:</label>
+        <InputText @bind-Value="loginUserModel.Email" />
+    </div>
+    <div>
+        <label>Password:</label>
+        <InputText @bind-Value="loginUserModel.Password" type="password" />
+    </div>
+    <button type="submit">Login</button>
+</EditForm>
+
+@code {
+    private LoginUserModel loginUserModel = new();
+
+    private async Task LoginAsync()
+    {
+        var result = await AccountApiService.LoginAsync(loginUserModel);
+        if (result.IsSuccess)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}

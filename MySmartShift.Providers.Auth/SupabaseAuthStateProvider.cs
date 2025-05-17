@@ -1,36 +1,29 @@
-﻿using Blazored.LocalStorage;
-using Microsoft.AspNetCore.Components.Authorization;
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.Security.Claims;
-using System.Text.Json;
 using Supabase.Gotrue;
 
 namespace MySmartShift.Providers.Auth;
 
-public class SupabaseAuthStateProvider(Supabase.Client supabase, ILocalStorageService localStorage) : AuthenticationStateProvider
+public class SupabaseAuthStateProvider(Supabase.Client supabase, ProtectedLocalStorage localStorage) : AuthenticationStateProvider, ISupabaseAuthStateProvider
 {
     private readonly Supabase.Client _supabase = supabase;
-    private readonly ILocalStorageService _localStorage = localStorage;
+    private readonly ProtectedLocalStorage _localStorage = localStorage;
 
-    private const string SessionKey = "auth-token";
+    private const string SessionKey = "sessionState";
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var sessionJson = await _localStorage.GetItemAsync<string>(SessionKey);
+        var sessionModel = (await _localStorage.GetAsync<Session>(SessionKey)).Value;
 
-        if (string.IsNullOrWhiteSpace(sessionJson))        {
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
-        }
-
-        var session = JsonSerializer.Deserialize<Session>(sessionJson);
-
-        if (session == null || session.User == null || string.IsNullOrWhiteSpace(session.AccessToken) || string.IsNullOrWhiteSpace(session.RefreshToken))
+        if (sessionModel == null || sessionModel.User == null || string.IsNullOrWhiteSpace(sessionModel.AccessToken) || string.IsNullOrWhiteSpace(sessionModel.RefreshToken))
         {
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
-        await _supabase.Auth.SetSession(session.AccessToken, session.RefreshToken);
+        await _supabase.Auth.SetSession(sessionModel.AccessToken, sessionModel.RefreshToken);
 
-        var identiy = new ClaimsIdentity([new Claim(ClaimTypes.Name, session.User.Id ?? string.Empty)], "supabase");
+        var identiy = new ClaimsIdentity([new Claim(ClaimTypes.Name, sessionModel.User.Id ?? string.Empty)], "supabase");
 
         var user = new ClaimsPrincipal(identiy);
 
@@ -41,16 +34,14 @@ public class SupabaseAuthStateProvider(Supabase.Client supabase, ILocalStorageSe
     {
         if (session != null)
         {
-            var json = JsonSerializer.Serialize(session);
-
-            await _localStorage.SetItemAsync(SessionKey, json);
+            await _localStorage.SetAsync(SessionKey, session);
 
             var authState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.Name, session.User?.Id ?? string.Empty)], "supabase")));
             NotifyAuthenticationStateChanged(Task.FromResult(authState));
         }
         else
         {
-            await _localStorage.RemoveItemAsync(SessionKey);
+            await _localStorage.DeleteAsync(SessionKey);
             var anon = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             NotifyAuthenticationStateChanged(Task.FromResult(anon));
         }

@@ -1,0 +1,46 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.Authorization
+@using MySmartShift.Core.Models.Account
+@using MySmartShift.Core.Services.Account.Api
+@using MySmartShift.Providers.Auth
+
+@inject NavigationManager NavigationManager
+
+@inject IAccountApiService AccountApiService;
+@inject AuthenticationStateProvider AuthStateProvider
+@inject UserContext UserContext
+
+<h3>Welcome to MySmartShift!</h3>
+
+<AuthorizeView>
+    <Authorized>
+        <p><strong>You are authenticated!</strong></p>
+    </Authorized>
+    <NotAuthorized>
+        <p><strong>You are not authenticated.</strong></p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@if (UserContext.CurrentUser != null)
+{
+    <p>Hello there, @UserContext.CurrentUser.Role</p>
+}
+
+<MudButton Href="/projects" Color="Color.Primary">Projects</MudButton>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await UserContext.EnsureUserAsync();
+    }
+
+    private async void Logout()
+    {
+        var result = await AccountApiService.LogoutAsync();
+
+        if (result.IsSuccess)
+        {
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true); // Force refresh the page
+        }
+    }
+}

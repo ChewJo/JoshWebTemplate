@@ -8,9 +8,16 @@
 
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+    <PackageReference Include="Blazored.Toast" Version="4.2.1" />
     <PackageReference Include="FluentResults" Version="3.16.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="9.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.1" />
     <PackageReference Include="Supabase" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MySmartShift.Core\MySmartShift.Core.csproj" />
   </ItemGroup>
 
 </Project>

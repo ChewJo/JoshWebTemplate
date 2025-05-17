@@ -5,11 +5,10 @@ using MySmartShift.Providers.Auth;
 
 namespace MySmartShift.Services.Account.Api;
 
-public class AccountApiService(Supabase.Client supabase, SupabaseAuthStateProvider authProvider) : IAccountApiService
+public class AccountApiService(Supabase.Client supabase, ISupabaseAuthStateProvider supabaseAuth) : IAccountApiService
 {
     private readonly Supabase.Client _supabase = supabase;
-
-    private readonly SupabaseAuthStateProvider _authProvider = authProvider;
+    private readonly ISupabaseAuthStateProvider _supabaseAuth = supabaseAuth;
 
     public async Task<Result> LoginAsync(LoginUserModel loginUserModel)
     {
@@ -22,7 +21,7 @@ public class AccountApiService(Supabase.Client supabase, SupabaseAuthStateProvid
                 return Result.Fail("Login failed");
             }
 
-            await _authProvider.Auth_OnAuthStateChanged(session);
+            await _supabaseAuth.Auth_OnAuthStateChanged(session);
 
             return Result.Ok();
         }
@@ -51,8 +50,7 @@ public class AccountApiService(Supabase.Client supabase, SupabaseAuthStateProvid
         try
         {
             await _supabase.Auth.SignOut();
-
-            await _authProvider.Auth_OnAuthStateChanged(null);
+            await _supabaseAuth.Auth_OnAuthStateChanged(null);
 
             return Result.Ok();
         }
@@ -77,5 +75,4 @@ public class AccountApiService(Supabase.Client supabase, SupabaseAuthStateProvid
 
         return response.Models.SingleOrDefault();
     }
-
 }
