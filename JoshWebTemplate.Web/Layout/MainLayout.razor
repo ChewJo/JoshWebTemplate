@@ -1,0 +1,18 @@
+﻿@using JoshWebTemplate.Providers.Auth
+@using JoshWebTemplate.Web.Components.Navigation
+
+@inject UserContext UserContext
+
+@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <Header />
+    <MudMainContent Class="pt-16 pa-4">
+        @Body
+    </MudMainContent>
+</MudLayout>
