@@ -4,10 +4,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor.Services;
 using MySmartShift.Core.Services.Account.Api;
-using MySmartShift.Core.Services.Projects.Api;
 using MySmartShift.Providers.Auth;
 using MySmartShift.Services.Account.Api;
-using MySmartShift.Services.Projects.Api;
 using MySmartShift.Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,7 +41,6 @@ builder.Services.AddCascadingAuthenticationState();
 
 // Add application services
 builder.Services.AddScoped<IAccountApiService, AccountApiService>();
-builder.Services.AddScoped<IProjectApiService, ProjectApiService>();
 
 builder.Services.AddScoped<UserContext>();
 

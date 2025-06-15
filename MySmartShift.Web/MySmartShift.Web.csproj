@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MySmartShift.Services.Account\MySmartShift.Services.Account.csproj" />
-    <ProjectReference Include="..\MySmartShift.Services.Projects\MySmartShift.Services.Projects.csproj" />
   </ItemGroup>
 
 

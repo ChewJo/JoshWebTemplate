@@ -19,9 +19,11 @@
 		<DebugSymbols>true</DebugSymbols>
 	</PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="BusinessLogic\" />
-  </ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="BusinessLogic\**" />
+	  <EmbeddedResource Remove="BusinessLogic\**" />
+	  <None Remove="BusinessLogic\**" />
+	</ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentResults" Version="3.16.0" />
