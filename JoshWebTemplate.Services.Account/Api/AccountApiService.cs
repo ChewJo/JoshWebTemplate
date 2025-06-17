@@ -75,4 +75,16 @@ public class AccountApiService(Supabase.Client supabase, ISupabaseAuthStateProvi
 
         return response.Models.SingleOrDefault();
     }
+
+    public async Task<UserModel?> GetUserModelByProfileIdAsync(int profileId)
+    {
+        var response = await _supabase
+            .From<UserModel>()
+            .Where(x => x.ProfileId == profileId)
+            .Get();
+
+        return response.Models.SingleOrDefault();
+    }
+
+
 }

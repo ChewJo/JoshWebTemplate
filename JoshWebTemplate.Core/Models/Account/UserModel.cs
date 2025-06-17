@@ -12,6 +12,17 @@ public class UserModel : BaseModel
     [Required]
     public Guid Id { get; set; }
 
+    [Column("profile_id")]
+    [Required]
+    public int ProfileId { get; set; }
+
+    [Column("firstname")]
+    [Required]
+    public string Firstname { get; set; } = "";
+
+    [Column("lastname")]
+    public string Lastname { get; set; } = "";
+
     [Column("email")]
     [Required]
     public string Email { get; set; } = "";
@@ -25,5 +36,4 @@ public class UserModel : BaseModel
 
     [Column("role")]
     public string? Role { get; set; }
-
 }

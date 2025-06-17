@@ -1,0 +1,34 @@
+﻿@page "/profile/{ProfileId:int}"
+
+@using JoshWebTemplate.Core.Models.Account
+@using JoshWebTemplate.Core.Services.Account.Api
+@using JoshWebTemplate.Providers.Auth
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inject IAccountApiService AccountApiService;
+@inject AuthenticationStateProvider AuthStateProvider
+@inject UserContext UserContext
+
+@if (Profile != null)
+{
+    <span>Welcome to @Profile.ProfileId's account!</span>
+}
+else
+{
+    <span>No profile found</span>
+}
+
+@code {
+    [Parameter] public int ProfileId { get; set; }
+    public UserModel Profile { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UserContext.EnsureUserAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Profile = await AccountApiService.GetUserModelByProfileIdAsync(ProfileId);
+    }
+}

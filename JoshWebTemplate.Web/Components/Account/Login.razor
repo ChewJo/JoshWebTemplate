@@ -2,26 +2,29 @@
 @using JoshWebTemplate.Core.Models.Account
 @using JoshWebTemplate.Core.Services.Account.Api
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using System.ComponentModel.DataAnnotations
 @inject ProtectedSessionStorage ProtectedSessionStore
 
 @inject IAccountApiService AccountApiService
 @inject NavigationManager NavigationManager
 
-<EditForm Model="loginUserModel" OnValidSubmit="LoginAsync">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div>
-        <label>Email:</label>
-        <InputText @bind-Value="loginUserModel.Email" />
-    </div>
-    <div>
-        <label>Password:</label>
-        <InputText @bind-Value="loginUserModel.Password" type="password" />
-    </div>
-    <button type="submit">Login</button>
-</EditForm>
+
+<MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+
+
+    <MudTextField T="string" Required="true" RequiredError="Email is required!" @bind-Value="loginUserModel.Email" Label="Email" Variant="Variant.Outlined" Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
+
+    <MudTextField @bind-Value="loginUserModel.Password" Label="Password" InputType="InputType.Password" Variant="Variant.Outlined" />
+</MudForm>
+
+
 
 @code {
+    bool success;
+    string[] errors = { };
+    MudTextField<string> pwField1;
+    MudForm form;
+
     private LoginUserModel loginUserModel = new();
 
     private async Task LoginAsync()
