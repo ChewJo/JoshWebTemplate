@@ -1,0 +1,36 @@
+﻿@using JoshWebTemplate.Core.Models.Account
+@using JoshWebTemplate.Core.Services.Account.Api
+
+@inject IAccountApiService AccountApiService
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <MudText Typo="Typo.h5">Company Employees</MudText>
+
+    <div style="display: flex; gap: 1rem; align-items: center;">
+        <MudButton Variant="Variant.Text"
+                   Color="Color.Primary"
+                   Href="/allemployees"
+                   Style="text-decoration: underline; text-transform: none;">
+            View All
+        </MudButton>
+
+    </div>
+</div>
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge">
+    <MudGrid>
+        @foreach (var user in userList.Take(8))
+        {
+            <EmployeeCard user="@user" />
+        }
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private List<UserModel> userList = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        userList = await AccountApiService.GetAllUserModelsAsync();
+    }
+}

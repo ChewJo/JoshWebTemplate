@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoshWebTemplate.Services.Ac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoshWebTemplate.Providers.Auth", "JoshWebTemplate.Providers.Auth\JoshWebTemplate.Providers.Auth.csproj", "{D771CB60-438A-6C27-6719-B18B83121B6C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CompanyNews", "CompanyNews", "{B12F4216-C16D-493F-A3A4-386513F79559}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoshWebTemplate.Services.CompanyNews", "JoshWebTemplate.Services.CompanyNews\JoshWebTemplate.Services.CompanyNews.csproj", "{D897BAA7-F95D-4888-AAFB-B1B4889869C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,10 @@ Global
 		{D771CB60-438A-6C27-6719-B18B83121B6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D771CB60-438A-6C27-6719-B18B83121B6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D771CB60-438A-6C27-6719-B18B83121B6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D897BAA7-F95D-4888-AAFB-B1B4889869C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D897BAA7-F95D-4888-AAFB-B1B4889869C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D897BAA7-F95D-4888-AAFB-B1B4889869C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D897BAA7-F95D-4888-AAFB-B1B4889869C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +64,8 @@ Global
 		{61B80195-FC08-6CE4-F615-A32E46AF9FD4} = {4FDA8AE1-1448-44C1-9F7D-F34AAB020F41}
 		{5ACF0D27-A4F1-8286-6698-A6B277D943AE} = {A0E10AD4-AB49-41AE-9034-B8AD8CC699E9}
 		{D771CB60-438A-6C27-6719-B18B83121B6C} = {4001155C-0421-4541-A62A-99B4B9B1C3F9}
+		{B12F4216-C16D-493F-A3A4-386513F79559} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{D897BAA7-F95D-4888-AAFB-B1B4889869C0} = {B12F4216-C16D-493F-A3A4-386513F79559}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1EA7F5FA-2408-41E7-8887-267C046EDC38}

@@ -11,7 +11,9 @@ public interface IAccountApiService
 
     public Task<Result> LogoutAsync();
 
-    public Task<UserModel?> GetCurrentUserModelAsync();
+    public Task<UserModel> GetCurrentUserModelAsync();
 
-    public Task<UserModel?> GetUserModelByProfileIdAsync(int profileId);
+    public Task<UserModel> GetUserModelByProfileIdAsync(int profileId);
+
+    public Task<List<UserModel>> GetAllUserModelsAsync();
 }

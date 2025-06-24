@@ -1,0 +1,20 @@
+﻿@page "/newscard/{NewsId:int}"
+
+@using JoshWebTemplate.Core.Models.CompanyNews
+@using JoshWebTemplate.Core.Services.CompanyNews.Api
+@inject ICompanyNewsApiService CompanyNewsApiService
+
+<h3>@item.Title</h3>
+
+<span>@item.Description</span>
+<span>Created on: @item.CreatedDate.ToShortTimeString()</span>
+
+@code {
+    [Parameter] public int NewsId { get; set; }
+    private CompanyNewsModel item = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        item = await CompanyNewsApiService.GetCompanyNewsByIdAsync(NewsId);
+    }
+}

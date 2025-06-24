@@ -1,0 +1,52 @@
+﻿@using JoshWebTemplate.Core.Models.CompanyNews
+@using JoshWebTemplate.Core.Services.CompanyNews.Api
+@using JoshWebTemplate.Web.Components.Dialogs
+
+@inject ICompanyNewsApiService CompanyNewsApiService
+@inject IDialogService DialogService
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <MudText Typo="Typo.h5">Company News Feed</MudText>
+
+    <div style="display: flex; gap: 1rem; align-items: center;">
+        <MudButton Variant="Variant.Text"
+                   Color="Color.Primary"
+                   Href="/allcompanynews"
+                   Style="text-decoration: underline; text-transform: none;">
+            View All
+        </MudButton>
+
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="OpenDialogAsync">
+            Add News Feed
+        </MudButton>
+    </div>
+</div>
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge">
+    <MudGrid>
+        @foreach (var news in CompanyNewsList.Take(8))
+        {
+            <MudItem xs="12" sm="6" md="3">
+                <CompanyNewsCard companyNewsModel="@news" />
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private List<CompanyNewsModel> CompanyNewsList = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        CompanyNewsList = await CompanyNewsApiService.GetAllCompanyNewsAsync();
+    }
+
+    private Task OpenDialogAsync()
+    {
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium };
+
+        return DialogService.ShowAsync<AddCompanyNewsDialog>("Add Company News", options);
+    }
+}

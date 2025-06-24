@@ -1,4 +1,5 @@
-﻿using Supabase.Postgrest.Attributes;
+﻿using JoshWebTemplate.Core.Enums;
+using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 using System.ComponentModel.DataAnnotations;
 
@@ -36,4 +37,7 @@ public class UserModel : BaseModel
 
     [Column("role")]
     public string? Role { get; set; }
+
+    [Column("office_location")]
+    public OfficeLocations? OfficeLocation { get; set; }
 }

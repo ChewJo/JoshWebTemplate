@@ -1,4 +1,5 @@
-﻿@page "/profile/{ProfileId:int}"
+﻿@page "/profile/{ProfileId:int?}"
+@page "/profile"
 
 @using JoshWebTemplate.Core.Models.Account
 @using JoshWebTemplate.Core.Services.Account.Api
@@ -9,9 +10,31 @@
 @inject AuthenticationStateProvider AuthStateProvider
 @inject UserContext UserContext
 
+<PageTitle>Employees Page</PageTitle>
+
 @if (Profile != null)
 {
-    <span>Welcome to @Profile.ProfileId's account!</span>
+    <PageTitle>@Profile.Firstname's Page</PageTitle>
+    <h1>Welcome to @Profile.Firstname @Profile.Lastname's account!</h1>
+
+    <MudPaper>
+        <h3>Contact Information</h3>
+        <div>
+            <MudIcon Icon="@Icons.Material.Filled.House" Title="Office" />
+            @Profile.OfficeLocation.Value
+        </div>
+
+        <div>
+            <MudIcon Icon="@Icons.Material.Filled.Phone" Title="Phone Number" />
+            0324432432
+        </div>
+
+        <div>
+            <MudIcon Icon="@Icons.Material.Filled.Email" Title="Email" />
+            @Profile.Email
+        </div>
+    </MudPaper>
+
 }
 else
 {
@@ -19,7 +42,7 @@ else
 }
 
 @code {
-    [Parameter] public int ProfileId { get; set; }
+    [Parameter] public int? ProfileId { get; set; }
     public UserModel Profile { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
@@ -29,6 +52,13 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        Profile = await AccountApiService.GetUserModelByProfileIdAsync(ProfileId);
+        if (ProfileId.HasValue || ProfileId != null)
+        {
+            Profile = await AccountApiService.GetUserModelByProfileIdAsync((int)ProfileId);
+        }
+        else
+        {
+            Profile = await AccountApiService.GetCurrentUserModelAsync();
+        }
     }
 }

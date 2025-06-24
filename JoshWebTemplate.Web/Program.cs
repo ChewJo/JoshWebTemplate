@@ -1,8 +1,10 @@
 using Blazored.LocalStorage;
 using Blazored.Toast;
 using JoshWebTemplate.Core.Services.Account.Api;
+using JoshWebTemplate.Core.Services.CompanyNews.Api;
 using JoshWebTemplate.Providers.Auth;
 using JoshWebTemplate.Services.Account.Api;
+using JoshWebTemplate.Services.CompanyNews.Api;
 using JoshWebTemplate.Web;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor.Services;
@@ -40,6 +42,7 @@ builder.Services.AddCascadingAuthenticationState();
 
 // Add application services
 builder.Services.AddScoped<IAccountApiService, AccountApiService>();
+builder.Services.AddScoped<ICompanyNewsApiService, CompanyNewsApiService>();
 
 builder.Services.AddScoped<UserContext>();
 

@@ -1,36 +1,37 @@
 ﻿@page "/"
+@using JoshWebTemplate.Core.Models.Account
+@using JoshWebTemplate.Core.Models.CompanyNews
 @using JoshWebTemplate.Core.Services.Account.Api
+@using JoshWebTemplate.Core.Services.CompanyNews.Api
 @using JoshWebTemplate.Providers.Auth
+@using JoshWebTemplate.Web.Components.CompanyNews
+@using JoshWebTemplate.Web.Components.Employees
 @using Microsoft.AspNetCore.Components.Authorization
 
 @inject NavigationManager NavigationManager
 
 @inject IAccountApiService AccountApiService;
-@inject AuthenticationStateProvider AuthStateProvider
 @inject UserContext UserContext
 
 <PageTitle>MadeUp's CMS</PageTitle>
 
-<h3>Welcome to MadeUp Consulting's CMS (Centralised Management System)</h3>
-<span>Here employees are able to view company policies, keep up to date with colleagues and share company news.</span>
-
 <AuthorizeView>
     <Authorized>
-        <p><strong>You are authenticated!</strong></p>
+        <h1>Welcome to MadeUp Consulting's CMS (Centralised Management System)</h1>
+        <span>This website is used internally by <strong>MadeUp Consulting</strong>. This is where employees are able to keep up to date with the business, explore projects and share news.</span>
+        <CompanyNewsFeed />
+
+        <EmployeeFeed />
     </Authorized>
     <NotAuthorized>
-        <p><strong>You are not authenticated.</strong></p>
+        <p><strong>You are not logged in.</strong></p>
     </NotAuthorized>
 </AuthorizeView>
 
-@if (UserContext.CurrentUser != null)
-{
-    <p>Hello there, @UserContext.CurrentUser.Role</p>
-}
-
-<MudButton Href="/projects" Color="Color.Primary">Projects</MudButton>
-
 @code {
+    public AddCompanyNewsRequest model = new();
+    public UserModel userModel = new();
+
     protected override async Task OnInitializedAsync()
     {
         await UserContext.EnsureUserAsync();

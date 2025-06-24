@@ -20,6 +20,7 @@
     <ProjectReference Include="..\JoshWebTemplate.Core\JoshWebTemplate.Core.csproj" />
     <ProjectReference Include="..\JoshWebTemplate.Providers.Auth\JoshWebTemplate.Providers.Auth.csproj" />
     <ProjectReference Include="..\JoshWebTemplate.Services.Account\JoshWebTemplate.Services.Account.csproj" />
+    <ProjectReference Include="..\JoshWebTemplate.Services.CompanyNews\JoshWebTemplate.Services.CompanyNews.csproj" />
   </ItemGroup>
 
 </Project>

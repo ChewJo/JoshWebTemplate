@@ -86,5 +86,21 @@ public class AccountApiService(Supabase.Client supabase, ISupabaseAuthStateProvi
         return response.Models.SingleOrDefault();
     }
 
+    public async Task<List<UserModel>> GetAllUserModelsAsync()
+    {
+        try
+        {
+            var response = await _supabase
+                .From<UserModel>()
+                .Get();
+
+            return response.Models ?? new List<UserModel>();
+        }
+        catch (Exception)
+        {
+            return new List<UserModel>();
+        }
+    }
+
 
 }

@@ -1,0 +1,93 @@
+﻿@using JoshWebTemplate.Core.Models.CompanyNews
+@using JoshWebTemplate.Core.Services.Account.Api
+@using JoshWebTemplate.Core.Services.CompanyNews.Api
+
+@inject IAccountApiService AccountApiService;
+@inject ICompanyNewsApiService CompanyNewsApiService
+
+<MudDialog>
+    <TitleContent>Add Company News</TitleContent>
+    <DialogContent>
+        <MudForm @ref="form" @bind-IsValid="@isValid" @bind-Errors="@errors">
+
+            <MudTextField Label="Title"
+                          @bind-Value="model.Title"
+                          For="@(() => model.Title)"
+                          Required="true"
+                          RequiredError="Title is required"
+                          Immediate="true" />
+
+            <MudTextField Label="Description"
+                          @bind-Value="model.Description"
+                          For="@(() => model.Description)"
+                          Required="true"
+                          RequiredError="Description is required"
+                          Lines="3"
+                          Immediate="true" />
+
+        </MudForm>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary"
+                   OnClick="Submit"
+                   Disabled="@(!isValid || isSubmitting)">
+            @if (isSubmitting)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                <MudText Class="ms-2">Adding...</MudText>
+            }
+            else
+            {
+                <MudText>Add News</MudText>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private MudForm form = default!;
+    private bool isValid;
+    private string[] errors = { };
+    private bool isSubmitting = false;
+
+    private AddCompanyNewsRequest model = new();
+
+    private async Task Submit()
+    {
+        if (!isValid)
+            return;
+
+        isSubmitting = true;
+        StateHasChanged();
+
+        try
+        {
+            var userModel = await AccountApiService.GetCurrentUserModelAsync();
+            model.CreatedById = userModel.ProfileId;
+
+            var result = await CompanyNewsApiService.AddCompanyNewsAsync(model);
+
+            if (result.IsSuccess)
+            {
+                MudDialog.Close(DialogResult.Ok(true));
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error adding company news: " + ex.Message);
+        }
+        finally
+        {
+            isSubmitting = false;
+            StateHasChanged();
+        }
+    }
+
+}
