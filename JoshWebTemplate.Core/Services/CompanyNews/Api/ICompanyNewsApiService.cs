@@ -12,4 +12,6 @@ public interface ICompanyNewsApiService
 
     Task<CompanyNewsModel> GetCompanyNewsByIdAsync(int newsId);
 
+    Task<Result> UpdateCompanyNewsItem(CompanyNewsModel model);
+
 }

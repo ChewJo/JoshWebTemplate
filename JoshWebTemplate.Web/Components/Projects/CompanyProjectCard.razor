@@ -1,0 +1,19 @@
+﻿@using JoshWebTemplate.Core.Models.CompanyProjects
+
+@inject NavigationManager NavigationManager
+
+<MudCard Class="pa-4 cursor-pointer hover-elevation" @onclick="NavigateToCompanyNews">
+    <h3>@companyProjectsModel.Title</h3>
+    <span>@companyProjectsModel.Description</span>
+    <span>Created on: @companyProjectsModel.CreatedDate.ToShortTimeString()</span>
+</MudCard>
+
+@code {
+    [Parameter]
+    public CompanyProjectModel companyProjectsModel { get; set; } = default!;
+
+    private void NavigateToCompanyNews()
+    {
+        NavigationManager.NavigateTo($"/project/{companyProjectsModel.Id}");
+    }
+}

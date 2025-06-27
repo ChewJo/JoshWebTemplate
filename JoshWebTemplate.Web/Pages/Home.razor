@@ -4,8 +4,10 @@
 @using JoshWebTemplate.Core.Services.Account.Api
 @using JoshWebTemplate.Core.Services.CompanyNews.Api
 @using JoshWebTemplate.Providers.Auth
+@using JoshWebTemplate.Web.Components
 @using JoshWebTemplate.Web.Components.CompanyNews
 @using JoshWebTemplate.Web.Components.Employees
+@using JoshWebTemplate.Web.Components.Projects
 @using Microsoft.AspNetCore.Components.Authorization
 
 @inject NavigationManager NavigationManager
@@ -22,9 +24,13 @@
         <CompanyNewsFeed />
 
         <EmployeeFeed />
+
+        <CompanyProjectsFeed />
     </Authorized>
     <NotAuthorized>
         <p><strong>You are not logged in.</strong></p>
+
+        <RedirectToLogin />
     </NotAuthorized>
 </AuthorizeView>
 

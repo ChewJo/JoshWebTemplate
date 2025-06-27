@@ -1,0 +1,91 @@
+﻿@using JoshWebTemplate.Core.Models.CompanyNews
+@using JoshWebTemplate.Core.Services.CompanyNews.Api
+@using Blazored.Toast.Services
+
+@inject ICompanyNewsApiService CompanyNewsApiService
+@inject NavigationManager NavigationManager
+
+<MudDialog>
+    <TitleContent>Edit Company News</TitleContent>
+    <DialogContent>
+        <MudForm @ref="form" @bind-IsValid="isValid" @bind-Errors="errors">
+            <MudTextField @bind-Value="item.Title"
+            For="@(() => item.Title)"
+            Label="Title"
+            Required="true"
+            RequiredError="Title is required"
+            Variant="Variant.Outlined"
+            Margin="Margin.Normal" />
+
+            <MudTextField @bind-Value="item.Description"
+            For="@(() => item.Description)"
+            Label="Description"
+            Required="true"
+            RequiredError="Description is required"
+            Variant="Variant.Outlined"
+            Margin="Margin.Normal"
+            Lines="4"
+            MaxLength="500" />
+        </MudForm>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary"
+        OnClick="Submit"
+        Disabled="@(!isValid || isSubmitting)">
+            @if (isSubmitting)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                <MudText Class="ms-2">Updating...</MudText>
+            }
+            else
+            {
+                <MudText>Update News</MudText>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private bool isValid;
+    private string[] errors = { };
+    private bool isSubmitting;
+
+    private MudForm form = default!;
+
+    [Parameter]
+    public CompanyNewsModel item { get; set; } = new();
+
+    private async Task Submit()
+    {
+        if (!isValid)
+            return;
+
+        isSubmitting = true;
+        try
+        {
+            var result = await CompanyNewsApiService.UpdateCompanyNewsItem(item);
+
+            if (result.IsSuccess)
+            {
+                MudDialog.Close();
+
+                NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Err: ", ex);
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+}

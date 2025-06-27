@@ -1,17 +1,14 @@
-﻿@page "/newscard/{NewsId:int}"
-
+﻿@page "/project/{projectId:int}"
 @using JoshWebTemplate.Core.Models.Account
-@using JoshWebTemplate.Core.Models.CompanyNews
+@using JoshWebTemplate.Core.Models.CompanyProjects
 @using JoshWebTemplate.Core.Services.Account.Api
-@using JoshWebTemplate.Core.Services.CompanyNews.Api
+@using JoshWebTemplate.Core.Services.CompanyProjects.Api
 @using JoshWebTemplate.Providers.Auth
-@using JoshWebTemplate.Web.Components.Dialogs
 
-@inject ICompanyNewsApiService CompanyNewsApiService
-@inject IAccountApiService AccountApiService
 @inject UserContext UserContext
 @inject NavigationManager Navigation
-@inject IDialogService DialogService
+@inject ICompanyProjectsApiService CompanyProjectsApiService
+@inject IAccountApiService AccountApiService
 
 <div class="px-8">
     <div class="d-flex justify-space-between align-center mb-4">
@@ -19,7 +16,6 @@
         @if (CanEditOrDelete == true)
         {
             <div class="d-flex gap-2">
-                <MudButton EndIcon="@Icons.Material.Filled.Edit" Variant="Variant.Outlined" Color="Color.Primary" OnClick="OpenDialogAsync">Edit</MudButton>
                 <MudButton EndIcon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Secondary" OnClick="DeleteTaskAsync">Delete</MudButton>
             </div>
         }
@@ -36,8 +32,8 @@
 </div>
 
 @code {
-    [Parameter] public int NewsId { get; set; }
-    private CompanyNewsModel item = new();
+    [Parameter] public int projectId { get; set; }
+    private CompanyProjectModel item = new();
     public UserModel creater = new();
     public UserModel userModel = new();
     public bool CanEditOrDelete = false;
@@ -51,10 +47,10 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        item = await CompanyNewsApiService.GetCompanyNewsByIdAsync(NewsId);
+        item = await CompanyProjectsApiService.GetCompanyProjectByIdAsync(projectId);
         creater = await AccountApiService.GetUserModelByProfileIdAsync(item.CreatedById);
 
-        if (item.CreatedById == userModel.ProfileId || userModel.Role == "admin")
+        if (userModel.Role == "admin")
         {
             CanEditOrDelete = true;
         }
@@ -62,23 +58,11 @@
 
     private async Task DeleteTaskAsync()
     {
-        var result = await CompanyNewsApiService.DeleteCompanyNewsAsync(item.Id);
+        var result = await CompanyProjectsApiService.DeleteCompanyProjectAsync(item.Id);
 
         if (result.IsSuccess)
         {
             Navigation.NavigateTo("/");
         }
-    }
-
-    private Task OpenDialogAsync()
-    {
-        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Medium };
-
-        var parameters = new DialogParameters<EditCompanyNewsDialog>
-        {
-            { x => x.item, item }
-        };
-
-        return DialogService.ShowAsync<EditCompanyNewsDialog>("Edit company news", parameters, options);
     }
 }

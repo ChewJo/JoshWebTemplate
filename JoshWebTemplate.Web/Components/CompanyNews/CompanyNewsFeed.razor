@@ -24,7 +24,12 @@
     </div>
 </div>
 
-<MudContainer MaxWidth="MaxWidth.ExtraLarge">
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Style="padding-bottom: 20px;">
+    @if (CompanyNewsList.Count <= 0)
+    {
+        <MudText Typo="Typo.h6" Color="Color.Secondary">There is no news!</MudText>
+        <MudText>Feel free to add a new items, by clicking "Add news feed" on the right.</MudText>
+    }
     <MudGrid>
         @foreach (var news in CompanyNewsList.Take(8))
         {
