@@ -5,7 +5,7 @@
 <MudCard Class="pa-4 cursor-pointer hover-elevation" @onclick="NavigateToCompanyNews">
     <h3>@companyNewsModel.Title</h3>
     <span>@companyNewsModel.Description</span>
-    <span>Created on: @companyNewsModel.CreatedDate.ToShortTimeString()</span>
+    <span>Created on: @companyNewsModel.CreatedDate.ToShortDateString()</span>
 </MudCard>
 
 @code {
